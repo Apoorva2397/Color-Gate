@@ -4,15 +4,18 @@ using UnityEngine.SceneManagement;
 
 public class ballMovement : MonoBehaviour {
     private Rigidbody2D ball;
-    public float upForce = 5.5f;
+    public float upForce = 6f;
     SpriteRenderer bRenderer;
     public Color Cyan;
     public Color Yellow;
     public Color Pink;
     public Color Purple;
+    public ParticleSystem explode;
     string color;
 	// Use this for initialization
 	void Start () {
+        if (explode.playOnAwake)
+            explode.Pause();
         bRenderer = GetComponent<SpriteRenderer>();
         ball = GetComponent<Rigidbody2D>();
         RandColor();
@@ -36,8 +39,7 @@ public class ballMovement : MonoBehaviour {
         }
         if((collider.tag != color) && (collider.tag != "point") && (collider.tag != "ColorChanger"))
         {
-            Application.LoadLevel(2);
-
+            StartCoroutine("playExplode");
         }
         
     }
@@ -71,13 +73,22 @@ public class ballMovement : MonoBehaviour {
     void Freeze() {
         if (transform.position.y <= -3.01f)
         {
-            ball.isKinematic = true;
-            
+            ball.velocity = new Vector2(0, 0);
+            ball.gravityScale = 0f;
+
         }
-        else if(transform.position.y > -3.01f)
-        {
-            ball.isKinematic = false;
+        else {
+            ball.gravityScale = 3;
         }
         
+    }
+    IEnumerator playExplode() {
+        ball.velocity = new Vector2(0, 0);
+        ball.gravityScale = 0f;
+        bRenderer.sprite = null;
+        if(!explode.isPlaying)
+            explode.Play();
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene(2);
     }
 }

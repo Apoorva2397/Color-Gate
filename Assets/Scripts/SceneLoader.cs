@@ -4,10 +4,23 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour {
 
-    
-   
-    public void SetScene() {
+   //static int currentLevel;
+    private void Start()
+    {
+        //currentLevel = SceneManager.GetActiveScene().buildIndex;
+        //int nextLevel = SceneManager.sceneCountInBuildSettings % currentLevel; 
+    }
 
-        Application.LoadLevel(1);
+    public static void reloadLevel() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        
 	}
+
+    public void setScene() {
+        SceneManager.LoadScene(1);
+    }
+    /* Loads the next Level in the scene
+    public static void nextLevel() {
+        SceneManager.LoadScene()
+    }*/
 }
